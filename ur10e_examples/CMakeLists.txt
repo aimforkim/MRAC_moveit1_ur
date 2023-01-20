@@ -174,6 +174,7 @@ include_directories(
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
 catkin_install_python(
   PROGRAMS
+  get_poses.py
   examples/sequencer.py
   examples/sequence.py
   examples/planner.py
