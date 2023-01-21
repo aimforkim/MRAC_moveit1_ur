@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 
 RUN pip3 install -U --no-cache-dir\
     argcomplete \
+    inputs \
     flake8-blind-except \
     flake8-builtins \
     flake8-class-newline \
