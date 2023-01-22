@@ -57,9 +57,6 @@ stop_srv_req.mesh_filepath = '/home/aims/test.ply'
 #                     normal_direction=Vector3(x=0.0, y=0.0, z=1.0), angle=90)]
 # stop_srv_req.min_num_faces = 1000
 
-vel_recon = 0.01
-acc_recon = 0.01
-
 
 def robot_program():
 
@@ -106,10 +103,12 @@ def robot_program():
 
     mgi.sequencer.plan(Lin(goal=pose2, vel_scale=0.01, acc_scale=0.01))
     mgi.sequencer.execute()
-    mgi.sequencer.plan(Ptp(goal=pose3, vel_scale=0.1, acc_scale=0.1))
+
+    mgi.sequencer.plan(Ptp(goal=pose3, vel_scale=0.1, acc_scale=0.2))
     mgi.sequencer.execute()
-    mgi.sequencer.plan(Lin(goal=pose4, vel_scale=0.01, acc_scale=0.01))
-    mgi.sequencer.execute()
+
+    # mgi.sequencer.plan(Lin(goal=pose4, vel_scale=0.01, acc_scale=0.01))
+    # mgi.sequencer.execute()
 
     # Stop reconstruction with service srv_req
     resp = stop_recon(stop_srv_req)
