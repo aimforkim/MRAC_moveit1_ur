@@ -54,10 +54,10 @@ def robot_program():
 
     # initialize node and moveit commander
     mgi = MoveGroupUtils()
-    
+
     # wait for rviz and moveit to start
     rospy.sleep(3.0)
-    
+
     # add collision object
     mgi.add_ground_cube()
 

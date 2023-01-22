@@ -48,7 +48,7 @@ def robot_program():
     sequence.append(Ptp(goal=pose1, vel_scale=0.1, acc_scale=0.1))
     sequence.append(Lin(goal=pose2, vel_scale=0.01, acc_scale=0.01))
     sequence.append(Ptp(goal=pose3, vel_scale=0.1, acc_scale=0.1))
-    sequence.append(Lin(goal=pose4, vel_scale=0.1, acc_scale=0.1))
+    sequence.append(Lin(goal=pose4, vel_scale=0.01, acc_scale=0.01))
 
     # sequence.append(Ptp(goal=home, vel_scale=0.2, acc_scale=0.2))
 

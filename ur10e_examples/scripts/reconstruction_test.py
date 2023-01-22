@@ -18,9 +18,9 @@ from pilz_robot_program.pilz_robot_program import Lin, Ptp, Sequence
 # define robot poses
 home = (0.0, -pi/2.0, pi/2.0, -pi, -pi/2, 0)
 
-pose1 = Pose(position=Point(0.72, -0.46, 0.148),
+pose1 = Pose(position=Point(0.72, -0.46, 0.145),
              orientation=Quaternion(0.0, 1.0, 0.0, 0.0))
-pose2 = Pose(position=Point(0.72, 0.15, 0.148),
+pose2 = Pose(position=Point(0.72, 0.15, 0.145),
              orientation=Quaternion(0.0, 1.0, 0.0, 0.0))
 pose3 = Pose(position=Point(0.90, -0.08, 0.148),
              orientation=Quaternion(0.0, 1.0, 0.0, 0.0))
@@ -47,7 +47,7 @@ start_srv_req.tsdf_params.sdf_trunc = 0.002
 start_srv_req.tsdf_params.min_box_values = Vector3(x=0.0, y=0.0, z=0.0)
 start_srv_req.tsdf_params.max_box_values = Vector3(x=0.0, y=0.0, z=0.0)
 start_srv_req.rgbd_params.depth_scale = 1000
-start_srv_req.rgbd_params.depth_trunc = 0.25
+start_srv_req.rgbd_params.depth_trunc = 0.20
 start_srv_req.rgbd_params.convert_rgb_to_intensity = False
 
 stop_srv_req = StopReconstructionRequest()
@@ -67,7 +67,7 @@ def robot_program():
     mgi = MoveGroupUtils()
 
     # wait for rviz and moveit to start
-    rospy.sleep(3.0)
+    rospy.sleep(1.0)
 
     # add collision object
     mgi.add_ground_cube()
@@ -104,12 +104,11 @@ def robot_program():
     else:
         rospy.loginfo('robot program: failed to start reconstruction')
 
-    mgi.sequencer.plan(
-        Lin(goal=pose2, vel_scale=0.01, acc_scale=0.01))
-    mgi.sequencer.plan(
-        Ptp(goal=pose3, vel_scale=0.01, acc_scale=0.01))
-    mgi.sequencer.plan(
-        Lin(goal=pose4, vel_scale=0.01, acc_scale=0.01))
+    mgi.sequencer.plan(Lin(goal=pose2, vel_scale=0.01, acc_scale=0.01))
+    mgi.sequencer.execute()
+    mgi.sequencer.plan(Ptp(goal=pose3, vel_scale=0.1, acc_scale=0.1))
+    mgi.sequencer.execute()
+    mgi.sequencer.plan(Lin(goal=pose4, vel_scale=0.01, acc_scale=0.01))
     mgi.sequencer.execute()
 
     # Stop reconstruction with service srv_req
