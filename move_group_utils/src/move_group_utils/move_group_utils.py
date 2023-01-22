@@ -102,7 +102,7 @@ class MoveGroupUtils:
         )
 
         self.scene.add_box('ground', pose, (2, 2, 1))
-        
+
         return self.wait_for_state_update('ground', object_is_known=True)
 
     def get_ik(self, pose: Pose) -> JointState:
