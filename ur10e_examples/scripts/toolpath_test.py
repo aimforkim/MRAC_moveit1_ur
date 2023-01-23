@@ -10,11 +10,27 @@ from move_group_utils.move_group_utils import (MoveGroupUtils,
                                                poses_list_from_yaml)
 from pilz_robot_program.pilz_robot_program import Lin, Ptp, Sequence
 
+# define endeffector
+# tcp pose should match static tf declared in launch file
+ee_name = 'D405'
+tcp_pose = Pose(position=Point(0.0, 0.0, 0.045),
+                orientation=Quaternion(0, 0, 0, 1))
+size = [0.042, 0.042, 0.023]
+
 
 def robot_program():
 
     mgi = MoveGroupUtils()
-    # rospy.sleep(1.0)
+    rospy.sleep(1.0)
+
+    mgi.add_ground_cube()
+
+    # attach camera and set new tcp
+    mgi.attach_camera(ee_name, tcp_pose, size)
+    mgi.move_group.set_end_effector_link(f'{ee_name}/tcp')
+    rospy.loginfo(
+        f'{mgi.name}: end effector link set to {mgi.move_group.get_end_effector_link()}'
+    )
 
     home = (0.0, -pi / 2.0, pi / 2.0, -pi, -pi/2.0, 0.0)
     pose1 = Pose(position=Point(0.72, -0.46, 0.148),
