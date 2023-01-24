@@ -55,8 +55,8 @@ def robot_program():
     # pose2 = poses[1]
     # print(pose1)
 
-    # # publish the poses to rviz for preview
-    # mgi.publish_pose_array(poses)
+    # publish the poses to rviz for preview
+    mgi.publish_pose_array([pose1, pose2, pose3, pose4])
 
     # for p in poses:
     #     sequence.append(Ptp(goal=p, vel_scale=0.2, acc_scale=0.2))
@@ -70,6 +70,8 @@ def robot_program():
 
     success, plan = mgi.sequencer.plan(sequence)[:2]
 
+    pose1_jointstate = mgi.get_ik(pose1)
+    print(f'pose1 joint state: \n {pose1_jointstate}')
     # mgi.display_trajectory(plan)
     # publish_trajectory_markers(plan[0])
 

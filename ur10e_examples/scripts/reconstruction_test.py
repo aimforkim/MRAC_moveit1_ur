@@ -77,8 +77,8 @@ def robot_program():
         '/start_reconstruction', StartReconstruction)
     stop_recon = rospy.ServiceProxy('/stop_reconstruction', StopReconstruction)
 
-    # # publish poses for visualization
-    # mgi.publish_pose_array([pose1, pose2])
+    # publish poses for visualization
+    mgi.publish_pose_array([pose1, pose2])
 
     # attach camera and set new tcp
     mgi.attach_camera(ee_name, tcp_pose, size)
