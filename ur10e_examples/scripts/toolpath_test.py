@@ -70,8 +70,9 @@ def robot_program():
 
     success, plan = mgi.sequencer.plan(sequence)[:2]
 
-    pose1_jointstate = mgi.get_ik(pose1)
-    print(f'pose1 joint state: \n {pose1_jointstate}')
+    # for i in range(10):
+    # pose1_jointstate = mgi.get_ik(pose1)
+    # print(pose1_jointstate)
     # mgi.display_trajectory(plan)
     # publish_trajectory_markers(plan[0])
 

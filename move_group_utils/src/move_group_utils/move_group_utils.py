@@ -122,7 +122,9 @@ class MoveGroupUtils:
 
         res = ik_srv(req)
 
-        return res.solution.joint_state
+        # rospy.loginfo(str(res))
+
+        return res.solution.joint_state.position
 
     def attach_end_effector(
         self,
