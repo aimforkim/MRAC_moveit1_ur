@@ -16,9 +16,10 @@ def robot_program():
 
     poses = []
     pose = mgi.move_group.get_current_pose()
+    joint = mgi.move_group.get_current_joint_values()
 
     print(pose)
-
+    print(joint)
     # while True:
     #     print("press 's' to save pose")
     #     if keyboard.is_pressed('s'):

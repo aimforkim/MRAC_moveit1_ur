@@ -34,12 +34,15 @@ def robot_program():
 
     # # visualize
     # mgi.publish_pose_array(pose_goals)
-
+    start_joint_state = (-0.5, -1.5, 2.0, -pi, -1.8, 0.0)  # right, tilt side
+    start_joint_state = (0.1, -1.5, 2.5, -3.3, -1.6, 0.0)  # left, tilt front
     p1 = pose_goals[0]
-    sequence.append(Lin(goal=p1, vel_scale=0.2, acc_scale=0.2))
+
+    sequence.append(Ptp(goal=start_joint_state, vel_scale=0.2, acc_scale=0.2))
+    sequence.append(Ptp(goal=p1, vel_scale=0.2, acc_scale=0.2))
 
     for p in pose_goals[1:]:
-        sequence.append(Ptp(goal=p, vel_scale=0.2, acc_scale=0.2))
+        sequence.append(Lin(goal=p, vel_scale=0.2, acc_scale=0.2))
 
     sequence.append(Ptp(goal=home, vel_scale=0.2, acc_scale=0.2))
 
