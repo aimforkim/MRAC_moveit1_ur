@@ -19,6 +19,16 @@ def pose_from_list(pose_list: List[float]) -> Pose:
     return pose
 
 
+def get_first_joint(pose_list: List):
+    first_pose = [pose for pose in pose_list]
+    joint_list = [joint for joint in first_pose]
+    joint1 = []
+    for joint_angle in joint_list:
+        joint1.append(round(joint_angle, 2))
+
+    return tuple(joint1)
+
+
 def robot_program():
 
     mgi = MoveGroupUtils()
@@ -30,15 +40,17 @@ def robot_program():
 
     # read poses from gh_rosparam
     pose_list = rospy.get_param('gh_poses')
-    pose_goals = [pose_from_list(pose)for pose in pose_list]
+    joint1 = get_first_joint(pose_list[0])
+    pose_goals = [pose_from_list(pose)for pose in pose_list[1:]]
 
     # # visualize
     # mgi.publish_pose_array(pose_goals)
-    start_joint_state = (-0.5, -1.5, 2.0, -pi, -1.8, 0.0)  # right, tilt side
-    start_joint_state = (0.1, -1.5, 2.5, -3.3, -1.6, 0.0)  # left, tilt front
+
+    # start_joint_state = (-0.5, -1.5, 2.0, -pi, -1.8, 0.0)  # right, tilt side
+    # start_joint_state = (0.1, -1.5, 2.5, -3.3, -1.6, 0.0)  # left, tilt front
     p1 = pose_goals[0]
 
-    sequence.append(Ptp(goal=start_joint_state, vel_scale=0.2, acc_scale=0.2))
+    sequence.append(Ptp(goal=joint1, vel_scale=0.2, acc_scale=0.2))
     sequence.append(Ptp(goal=p1, vel_scale=0.2, acc_scale=0.2))
 
     for p in pose_goals[1:]:

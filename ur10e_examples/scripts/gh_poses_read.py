@@ -19,16 +19,28 @@ def pose_from_list(pose_list: List[float]) -> Pose:
     return pose
 
 
+def get_first_joint(pose_list: List):
+    first_pose = [pose for pose in pose_list]
+    joint_list = [joint for joint in first_pose]
+    joint1 = []
+    for joint_angle in joint_list:
+        joint1.append(round(joint_angle, 2))
+
+    return tuple(joint1)
+
+
 if __name__ == "__main__":
-    mgi = MoveGroupUtils()
+    # mgi = MoveGroupUtils()
     if rospy.has_param('gh_poses'):
         pose_list = rospy.get_param('gh_poses')
         # print(pose_list)
-        pose_goals = [pose_from_list(pose)for pose in pose_list]
+        joint1 = get_first_joint(pose_list[0])
 
-        print(pose_goals)
+        pose_goals = [pose_from_list(pose)for pose in pose_list[1:]]
 
+        print(joint1)
+        print(type(joint1))
         # visualize the toolpath
-        mgi.publish_pose_array(pose_goals)
+        # mgi.publish_pose_array(pose_goals)
     else:
         print("no poses")
