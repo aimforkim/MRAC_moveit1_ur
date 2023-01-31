@@ -16,9 +16,10 @@ from pilz_robot_program.pilz_robot_program import Lin, Ptp, Sequence
 
 # define poses
 home = (0.0, -pi/2.0, pi/2.0, -pi, -pi/2, 0)
+joint1 = (0.154, -1.226, 1.636, -2.563, -1.667, -0.852)
 
 pose_list = poses_list_from_yaml(
-    '/dev_ws/src/ur10e_examples/toolpaths/wood_scan.yaml')
+    '/dev_ws/src/ur10e_examples/toolpaths/wood_scan_flat.yaml')
 toolpath = [list_to_pose(pose) for pose in pose_list]
 
 # define end effector
@@ -51,15 +52,15 @@ stop_srv_req.mesh_filepath = '/home/aims/test.ply'
 
 # define speed and acceleration
 
-move_vel = 0.5
-move_acc = 0.5
+move_vel = 0.3
+move_acc = 0.3
 
 # fine scan
 # scan_vel = 0.05
 # scan_acc = 0.0002
 
 # fast scan
-scan_vel = 0.03
+scan_vel = 0.02
 scan_acc = 0.005
 
 # boolean to enable/disable reconstruction
@@ -93,6 +94,11 @@ def robot_program():
     success, plan = mgi.sequencer.plan(Ptp(goal=home,
                                        vel_scale=move_vel,
                                        acc_scale=move_acc))[:2]
+    # move first joint
+    success, plan = mgi.sequencer.plan(Ptp(goal=joint1,
+                                           vel_scale=move_vel,
+                                           acc_scale=move_acc))[:2]
+
     if not success:
         return rospy.logerr('robot program: failed to plan to home position')
     mgi.sequencer.execute(plan)
@@ -107,12 +113,22 @@ def robot_program():
 
     # scanning sequence
     sequence = Sequence()
-    for pose in toolpath[1:-1]:
+    sequence.append(Lin(goal=toolpath[1],
+                        vel_scale=scan_vel,
+                        acc_scale=scan_acc))
+    sequence.append(Ptp(goal=toolpath[2],
+                    vel_scale=scan_vel,
+                    acc_scale=scan_acc))
+
+    for pose in toolpath[3:-2]:
         sequence.append(Lin(goal=pose,
                             vel_scale=scan_vel,
                             acc_scale=scan_acc),
                         blend_radius=0.01)
 
+    sequence.append(Ptp(goal=toolpath[-2],
+                    vel_scale=scan_vel,
+                    acc_scale=scan_acc))
     sequence.append(Lin(goal=toolpath[-1],
                     vel_scale=scan_vel,
                     acc_scale=scan_acc))
